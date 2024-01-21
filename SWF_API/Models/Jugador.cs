@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SWF_API.Models;
 
-public partial class Jugadores
+public partial class Jugador
 {
     public int Id { get; set; }
 

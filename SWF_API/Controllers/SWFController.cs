@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWF_API.Models;
+using System.Security.Cryptography;
 
 namespace SWF_API.Controllers
 {
@@ -41,9 +42,7 @@ namespace SWF_API.Controllers
             var old = edit.Descripcion;
 
             if (edit == null)
-            {
                 return BadRequest("Campeonato no encontrado");
-            }
 
             try
             {
@@ -68,7 +67,7 @@ namespace SWF_API.Controllers
                 DateTime fechaInicio = new DateTime(2024, 3, 1, 19, 0, 0);
                 DateTime fechaFin = fechaInicio.AddDays(184); // 6 meses
 
-                while(fechaInicio < fechaFin)
+                while (fechaInicio < fechaFin)
                 {
                     _dbcontext.Fechas.Add(new Fecha { Descripcion = fechaInicio.ToString("yyyy-MM-dd HH:mm:ss") });
                     fechaInicio = fechaInicio.AddDays(1);
@@ -86,6 +85,60 @@ namespace SWF_API.Controllers
         #endregion
 
         #region Jugadores
+
+        [HttpPost]
+        [Route("InsertJugador")]
+        public ActionResult Insert_Jugador(Jugador jugador)
+        {
+            try
+            {
+                _dbcontext.Jugadores.Add(jugador);
+                _dbcontext.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, new
+                {
+                    mensaje =
+                    "Jugador id: " + jugador.Id + " Nombre: " + jugador.Nombre + " Camiseta: " + jugador.Camiseta
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("EditJugador")]
+        public ActionResult Edit_Jugador(Jugador jugador)
+        {
+            Jugador edit = _dbcontext.Jugadores.Find(jugador.Id);
+            var oldName = edit.Nombre;
+            var oldNum = edit.Camiseta;
+
+            if (edit == null)
+                return BadRequest("Jugador no encontrado");
+
+            try
+            {
+                edit.Nombre = jugador.Nombre;
+                edit.Camiseta = jugador.Camiseta;
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new
+                {
+                    mensaje =
+                    "Jugador con id: " + jugador.Id + " Nombre: " + oldName + " editado ok a: " + edit.Nombre + " Camiseta: " + oldNum + " editado ok a: " + edit.Camiseta
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+
+        }
+
         #endregion
     }
 }

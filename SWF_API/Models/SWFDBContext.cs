@@ -19,7 +19,7 @@ public partial class SWFDBContext : DbContext
 
     public virtual DbSet<Fecha> Fechas { get; set; }
 
-    public virtual DbSet<Jugadores> Jugadores { get; set; }
+    public virtual DbSet<Jugador> Jugadores { get; set; }
 
     public virtual DbSet<Tweet> Tweets { get; set; }
 
@@ -55,7 +55,7 @@ public partial class SWFDBContext : DbContext
                 .HasColumnName("DESCRIPCION");
         });
 
-        modelBuilder.Entity<Jugadores>(entity =>
+        modelBuilder.Entity<Jugador>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__JUGADORES__3214EC275B6ACBF1");
 
@@ -96,7 +96,7 @@ public partial class SWFDBContext : DbContext
                 .HasForeignKey(d => d.IdFecha)
                 .HasConstraintName("FK__TWEETS__ID_FECHA__5165187F");
 
-            entity.HasOne(d => d.oJugadores).WithMany(p => p.Tweets)
+            entity.HasOne(d => d.oJugador).WithMany(p => p.Tweets)
                 .HasForeignKey(d => d.IdJugador)
                 .HasConstraintName("FK__TWEETS__ID_JUGAD__4F7CD00D");
         });

@@ -17,5 +17,5 @@ public partial class Tweet
 
     public virtual Fecha? IdFechaNavigation { get; set; }
 
-    public virtual Jugadores? oJugadores { get; set; }
+    public virtual Jugador? oJugador { get; set; }
 }
