@@ -1,0 +1,22 @@
+﻿@model JugadorViewModel
+
+@if (!string.IsNullOrEmpty(ViewBag.ResponseContent))
+{
+    <div class="text-center">
+        <p>@ViewBag.ResponseContent</p>
+    </div>
+}
+
+<form asp-action="Post_InsertJugador" asp-controller="Home" class="text-center">
+    <div class="form-group">
+        <div class="d-inline-block">
+            <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre" />
+        </div>
+        <div class="d-inline-block">
+            <input asp-for="Camiseta" type="number" class="form-control" placeholder="Camiseta" />
+        </div>
+        <div class="d-inline-block">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </div>
+    </div>
+</form>
