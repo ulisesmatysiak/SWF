@@ -129,14 +129,10 @@ namespace SWF_API.Controllers
                     "Jugador con id: " + jugador.Id + " Nombre: " + oldName + " editado ok a: " + edit.Nombre + " Camiseta: " + oldNum + " editado ok a: " + edit.Camiseta
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
             }
-
-
-
         }
 
         #endregion
