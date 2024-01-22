@@ -165,8 +165,6 @@ namespace SWF_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
             }
         }
-        #endregion 
-
         [HttpPut]
         [Route("InsertJugadorTweet")]
         public ActionResult Edit_JugadorTweet()
@@ -216,6 +214,8 @@ namespace SWF_API.Controllers
         //{
 
         //}
+        #endregion 
+
 
     }
 }
