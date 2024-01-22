@@ -165,6 +165,57 @@ namespace SWF_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
             }
         }
-        #endregion
+        #endregion 
+
+        [HttpPut]
+        [Route("InsertJugadorTweet")]
+        public ActionResult Edit_JugadorTweet()
+        {
+            try
+            {
+                var jugadores = _dbcontext.Jugadores.ToList();
+                var tweets = _dbcontext.Tweets.ToList();
+
+                for (int i = 0; i < tweets.Count; i++)
+                {
+                    tweets[i].IdJugador = jugadores[(i) % jugadores.Count].Id;
+                }
+
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Tweets generados correctamente por jugador." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public ActionResult Delete()
+        {
+            try
+            {
+                var tweets = _dbcontext.Tweets.Where(t => t.Id > 184).ToList();
+
+                _dbcontext.Tweets.RemoveRange(tweets);
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Tweets eliminados." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
+        //[HttpGet]
+        //[Route("Listar")]
+        //public ActionResult Listar()
+        //{
+
+        //}
+
     }
 }
