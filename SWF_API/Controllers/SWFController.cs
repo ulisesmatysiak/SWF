@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SWF_API.Models;
 using System.Security.Cryptography;
 
@@ -135,6 +136,35 @@ namespace SWF_API.Controllers
             }
         }
 
+        #endregion
+
+        #region Tweets
+        [HttpPost]
+        [Route("InsertFechaTweet")]
+        public ActionResult Insert_FechaTweet()
+        {
+            try
+            {
+                var fechas = _dbcontext.Fechas.ToList();
+
+                foreach (var fecha in fechas)
+                {
+                    var tweet = new Tweet
+                    {
+                        IdFecha = fecha.Id
+                    };
+                    _dbcontext.Tweets.Add(tweet);
+                }
+
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Tweets generados correctamente por fecha." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
         #endregion
     }
 }
