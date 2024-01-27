@@ -9,11 +9,7 @@ public partial class Tweet
 
     public int? IdJugador { get; set; }
 
-
-
     public int? IdFecha { get; set; }
-
-
 
     public virtual Fecha? IdFechaNavigation { get; set; }
 
