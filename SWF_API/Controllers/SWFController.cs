@@ -136,6 +136,21 @@ namespace SWF_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("ListarJugadores")]
+        public ActionResult List_Jugadores()
+        {
+            try
+            {
+                var jugadores = _dbcontext.Jugadores.ToList();
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Jugadores: ", jugadores });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
         #endregion
 
         #region Tweets
@@ -165,6 +180,7 @@ namespace SWF_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
             }
         }
+
         [HttpPut]
         [Route("InsertJugadorTweet")]
         public ActionResult Edit_JugadorTweet()
@@ -208,14 +224,22 @@ namespace SWF_API.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("Listar")]
-        //public ActionResult Listar()
-        //{
+        [HttpGet]
+        [Route("Listar")]
+        public ActionResult Listar()
+        {
+            try
+            {
+                var tweets = _dbcontext.Tweets.ToList();
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Tweets" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
 
-        //}
         #endregion 
-
 
     }
 }

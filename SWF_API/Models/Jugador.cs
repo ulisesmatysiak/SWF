@@ -15,5 +15,8 @@ public partial class Jugador
 
     public string? ImagenUrl { get; set; }
 
+    public int? IdCampeonato { get; set; }
+    public virtual Campeonato? IdCampeonatoNavigation { get; set; }
+
     public virtual ICollection<Tweet> Tweets { get; set; } = new List<Tweet>();
 }

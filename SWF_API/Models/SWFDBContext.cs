@@ -75,6 +75,10 @@ public partial class SWFDBContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("NOMBRE");
+            entity.Property(e => e.IdCampeonato).HasColumnName("IdCampeonato");
+            entity.HasOne(d => d.IdCampeonatoNavigation).WithMany(p => p.Jugadores)
+                .HasForeignKey(d => d.IdCampeonato)
+                .HasConstraintName("FK__JUGADORES__CAMPEONATOS");
         });
 
         modelBuilder.Entity<Tweet>(entity =>
@@ -84,13 +88,13 @@ public partial class SWFDBContext : DbContext
             entity.ToTable("TWEETS");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.IdCampeonato).HasColumnName("ID_CAMPEONATO");
+            //entity.Property(e => e.IdCampeonato).HasColumnName("ID_CAMPEONATO");
             entity.Property(e => e.IdFecha).HasColumnName("ID_FECHA");
             entity.Property(e => e.IdJugador).HasColumnName("ID_JUGADOR");
 
-            entity.HasOne(d => d.IdCampeonatoNavigation).WithMany(p => p.Tweets)
-                .HasForeignKey(d => d.IdCampeonato)
-                .HasConstraintName("FK__TWEETS__ID_CAMPE__5070F446");
+            //entity.HasOne(d => d.IdCampeonatoNavigation).WithMany(p => p.Tweets)
+            //    .HasForeignKey(d => d.IdCampeonato)
+            //    .HasConstraintName("FK__TWEETS__ID_CAMPE__5070F446");
 
             entity.HasOne(d => d.IdFechaNavigation).WithMany(p => p.Tweets)
                 .HasForeignKey(d => d.IdFecha)

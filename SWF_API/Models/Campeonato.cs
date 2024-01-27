@@ -9,5 +9,5 @@ public partial class Campeonato
 
     public string? Descripcion { get; set; }
 
-    public virtual ICollection<Tweet> Tweets { get; set; } = new List<Tweet>();
+    public virtual ICollection<Jugador> Jugadores { get; set; } = new List<Jugador>();
 }
