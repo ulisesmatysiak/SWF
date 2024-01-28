@@ -11,5 +11,7 @@
         public int? Camiseta { get; set; }
 
         public string? ImagenUrl { get; set; }
+
+        public List<CampeonatoViewModel> Campeonatos { get; set;}
     }
 }

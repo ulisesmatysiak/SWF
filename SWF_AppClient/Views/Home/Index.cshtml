@@ -1,4 +1,4 @@
-﻿@model JugadorViewModel
+﻿@model List<JugadorViewModel>
 
 @if (!string.IsNullOrEmpty(ViewBag.ResponseContent))
 {
@@ -7,16 +7,51 @@
     </div>
 }
 
-<form asp-action="Post_InsertJugador" asp-controller="Home" class="text-center">
-    <div class="form-group">
-        <div class="d-inline-block">
-            <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre" />
+@if (Model != null && Model.Any())
+{
+    <form asp-action="Put_EditJugador" asp-controller="Home" method="post" class="text-center">
+        <div class="form-group">
+            <div class="d-inline-block">
+                <select name="Id" class="form-control">
+                    <option value="">Seleccionar Jugador</option>
+                    @foreach (var jugador in Model)
+                    {
+                        <option value="@jugador.Id">@jugador.Nombre @jugador.Camiseta</option>
+                    }
+                </select>
+            </div>
+            <div class="d-inline-block">
+                <select name="campeonatoId" class="form-control">
+                    <option value="">Seleccionar Campeonato</option>
+                    @foreach (var item in Model)
+                    {
+                        @foreach (var campeonato in item.Campeonatos)
+                        {
+                            <option value="@campeonato.Id">@campeonato.Descripcion</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="d-inline-block">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
         </div>
-        <div class="d-inline-block">
-            <input asp-for="Camiseta" type="number" class="form-control" placeholder="Camiseta" />
+    </form>
+}
+
+@* else
+{
+    <form asp-action="Post_InsertJugador" asp-controller="Home" class="text-center">
+        <div class="form-group">
+            <div class="d-inline-block">
+                <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre" />
+            </div>
+            <div class="d-inline-block">
+                <input asp-for="Camiseta" type="number" class="form-control" placeholder="Camiseta" />
+            </div>
+            <div class="d-inline-block">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
         </div>
-        <div class="d-inline-block">
-            <button type="submit" class="btn btn-primary">Enviar</button>
-        </div>
-    </div>
-</form>
+    </form>
+} *@

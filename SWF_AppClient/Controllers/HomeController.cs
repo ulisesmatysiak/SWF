@@ -17,10 +17,57 @@ namespace SWF_AppClient.Controllers
             _client = client;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.ResponseContent = TempData["ResponseContent"] as string;
-            return View();
+
+            var httpClient = _client.CreateClient("SWF_API");
+
+            var response = await httpClient.GetAsync("ListarCombo");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                var jugadores = JsonConvert.DeserializeObject<List<JugadorViewModel>>(data.jugadores.ToString());
+                var campeonatos = JsonConvert.DeserializeObject<List<CampeonatoViewModel>>(data.campeonatos.ToString());
+
+                foreach (var item in jugadores)
+                    item.Campeonatos = campeonatos;
+
+                return View(jugadores);
+            }
+            else
+            {
+                return View();
+            }
+        }
+        public async Task<IActionResult> Put_EditJugador([FromForm]JugadorViewModel jugador,[FromForm] int campeonatoId)
+        {
+            var httpClient = _client.CreateClient("SWF_API");
+
+            var datos = new
+            {
+                id = jugador.Id,
+                IdCampeonato = campeonatoId
+            };
+
+            var jsonContent = JsonConvert.SerializeObject(datos);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PutAsync("EditJugador", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                TempData["ResponseContent"] = responseContent;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, response.ReasonPhrase);
+            }
         }
 
         public async Task<IActionResult> Post_InsertJugador(JugadorViewModel jugador)
@@ -50,39 +97,11 @@ namespace SWF_AppClient.Controllers
             }
         }
 
-        public async Task<IActionResult> Put_EditJugador(JugadorViewModel jugador)
-        {
-            var httpClient = _client.CreateClient("SWF_API");
-
-            var datos = new
-            {
-                id = jugador.Id,
-                Nombre = jugador.Nombre,
-                Camiseta = jugador.Camiseta
-            };
-
-            var jsonContent = JsonConvert.SerializeObject(datos);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-            var response = await httpClient.PutAsync("EditJugador", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                TempData["ResponseContent"] = responseContent;
-                return RedirectToAction("Privacy");
-            }
-            else
-            {
-                return StatusCode((int)response.StatusCode, response.ReasonPhrase);
-            }
-        }
 
         public IActionResult Privacy()
         {
             ViewBag.ResponseContent = TempData["ResponseContent"] as string;
             return View();
-        }
-
+        }    
     }
 }
