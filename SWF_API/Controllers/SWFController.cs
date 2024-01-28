@@ -56,6 +56,22 @@ namespace SWF_API.Controllers
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
             }
         }
+
+        [HttpGet]
+        [Route("ListarCampeonatos")]
+        public ActionResult List_Campeonatos()
+        {
+            try
+            {
+                var campeonatos = _dbcontext.Campeonatos.ToList();
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Campeonatos: ", campeonatos });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
         #endregion
 
         #region Fechas
@@ -112,22 +128,19 @@ namespace SWF_API.Controllers
         public ActionResult Edit_Jugador(Jugador jugador)
         {
             Jugador edit = _dbcontext.Jugadores.Find(jugador.Id);
-            var oldName = edit.Nombre;
-            var oldNum = edit.Camiseta;
 
             if (edit == null)
                 return BadRequest("Jugador no encontrado");
 
             try
             {
-                edit.Nombre = jugador.Nombre;
-                edit.Camiseta = jugador.Camiseta;
+                edit.IdCampeonato = jugador.IdCampeonato;
                 _dbcontext.SaveChanges();
 
                 return StatusCode(StatusCodes.Status200OK, new
                 {
                     mensaje =
-                    "Jugador con id: " + jugador.Id + " Nombre: " + oldName + " editado ok a: " + edit.Nombre + " Camiseta: " + oldNum + " editado ok a: " + edit.Camiseta
+                    "Jugador con id: " + jugador.Id + " Nombre: " + edit.Nombre +  " Campeonato: " + jugador.IdCampeonato + " editado ok a: " + edit.IdCampeonato
                 });
             }
             catch (Exception ex)
@@ -143,7 +156,8 @@ namespace SWF_API.Controllers
             try
             {
                 var jugadores = _dbcontext.Jugadores.ToList();
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Jugadores: ", jugadores });
+                //return StatusCode(StatusCodes.Status200OK, new { mensaje = "Jugadores: ", jugadores });
+                return Ok(jugadores);
             }
             catch (Exception ex)
             {
@@ -240,6 +254,40 @@ namespace SWF_API.Controllers
         }
 
         #endregion 
+
+        [HttpGet]
+        [Route("ListarCombo")]
+        public ActionResult Listar_Combo()
+        {
+            try
+            {
+                var jugadores = _dbcontext.Jugadores
+                    .Select(jugador => new
+                {
+                    Id = jugador.Id,
+
+                    Nombre = jugador.Nombre,
+                    Camiseta = jugador.Camiseta,
+
+                    IdCampeonato = jugador.IdCampeonato,
+                })
+                    .ToList();
+
+                var campeonatos = _dbcontext.Campeonatos.ToList();
+
+                var model = new
+                {
+                    Jugadores = jugadores,
+                    Campeonatos = campeonatos
+                };
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
 
     }
 }
