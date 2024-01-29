@@ -161,7 +161,39 @@ namespace SWF_API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("ListarCombo")]
+        public ActionResult Listar_Combo()
+        {
+            try
+            {
+                var jugadores = _dbcontext.Jugadores
+                    .Select(jugador => new
+                {
+                    Id = jugador.Id,
+                    Nombre = jugador.Nombre,
+                    Camiseta = jugador.Camiseta,
+                    IdCampeonato = jugador.IdCampeonato,
+                })
+                    .ToList();
+
+                var campeonatos = _dbcontext.Campeonatos.ToList();
+
+                var model = new
+                {
+                    Jugadores = jugadores,
+                    Campeonatos = campeonatos
+                };
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
             }
         }
 
@@ -254,40 +286,5 @@ namespace SWF_API.Controllers
         }
 
         #endregion 
-
-        [HttpGet]
-        [Route("ListarCombo")]
-        public ActionResult Listar_Combo()
-        {
-            try
-            {
-                var jugadores = _dbcontext.Jugadores
-                    .Select(jugador => new
-                {
-                    Id = jugador.Id,
-
-                    Nombre = jugador.Nombre,
-                    Camiseta = jugador.Camiseta,
-
-                    IdCampeonato = jugador.IdCampeonato,
-                })
-                    .ToList();
-
-                var campeonatos = _dbcontext.Campeonatos.ToList();
-
-                var model = new
-                {
-                    Jugadores = jugadores,
-                    Campeonatos = campeonatos
-                };
-
-                return Ok(model);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
-            }
-        }
-
     }
 }
