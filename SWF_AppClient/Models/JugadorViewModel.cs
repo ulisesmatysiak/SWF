@@ -12,6 +12,8 @@
 
         public string? ImagenUrl { get; set; }
 
+        public int? IdCampeonato { get; set; }
+
         public List<CampeonatoViewModel> Campeonatos { get; set;}
     }
 }

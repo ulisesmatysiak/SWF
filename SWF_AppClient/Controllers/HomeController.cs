@@ -33,10 +33,19 @@ namespace SWF_AppClient.Controllers
                 var jugadores = JsonConvert.DeserializeObject<List<JugadorViewModel>>(data.jugadores.ToString());
                 var campeonatos = JsonConvert.DeserializeObject<List<CampeonatoViewModel>>(data.campeonatos.ToString());
 
-                foreach (var item in jugadores)
+                var jugadoresFiltrados = new List<JugadorViewModel>();
+                foreach (var jugador in jugadores)
+                {
+                    if (jugador.IdCampeonato == null)
+                    {
+                        jugadoresFiltrados.Add(jugador);
+                    }
+                }
+
+                foreach (var item in jugadoresFiltrados)
                     item.Campeonatos = campeonatos;
 
-                return View(jugadores);
+                return View(jugadoresFiltrados);
             }
             else
             {
