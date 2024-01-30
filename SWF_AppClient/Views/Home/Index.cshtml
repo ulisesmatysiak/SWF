@@ -23,12 +23,9 @@
             <div class="d-inline-block">
                 <select name="campeonatoId" class="form-control">
                     <option value="">Seleccionar Campeonato</option>
-                    @foreach (var item in Model)
+                    @foreach (var campeonato in Model.First().Campeonatos)
                     {
-                        @foreach (var campeonato in item.Campeonatos)
-                        {
-                            <option value="@campeonato.Id">@campeonato.Descripcion</option>
-                        }
+                        <option value="@campeonato.Id">@campeonato.Descripcion</option>
                     }
                 </select>
             </div>
