@@ -134,6 +134,7 @@ namespace SWF_API.Controllers
 
             try
             {
+                edit.Nombre = jugador.Nombre;             
                 edit.IdCampeonato = jugador.IdCampeonato;
                 _dbcontext.SaveChanges();
 
