@@ -149,6 +149,34 @@ namespace SWF_API.Controllers
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
             }
         }
+        [HttpPut]
+        [Route("Imagen")]
+        public ActionResult EditImg_Jugador()
+        {
+            var jugadores = _dbcontext.Jugadores.ToList();
+
+            if (jugadores == null)
+                return BadRequest("Jugadores no encontrados");
+
+            try
+            {
+                foreach (var jugador in jugadores)
+                {
+                    if (jugador.Camiseta.HasValue && jugador.Id > 0)
+                    {
+                        jugador.ImagenUrl = $"img/{jugador.Camiseta}/_{jugador.Id}.jpg";
+                    }
+                }
+
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new{mensaje = "URL_IMAGEN actualizada correctamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
+            }
+        }
 
         [HttpGet]
         [Route("ListarJugadores")]
