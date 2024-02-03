@@ -23,29 +23,14 @@ namespace SWF_AppClient.Controllers
 
             var httpClient = _client.CreateClient("SWF_API");
 
-            var response = await httpClient.GetAsync("ListarCombo");
+            var response = await httpClient.GetAsync("Listar");
 
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<dynamic>(responseContent);
-
-                var jugadores = JsonConvert.DeserializeObject<List<JugadorViewModel>>(data.jugadores.ToString());
-                var campeonatos = JsonConvert.DeserializeObject<List<CampeonatoViewModel>>(data.campeonatos.ToString());
-
-                var jugadoresFiltrados = new List<JugadorViewModel>();
-                foreach (var jugador in jugadores)
-                {
-                    if (jugador.IdCampeonato == null)
-                    {
-                        jugadoresFiltrados.Add(jugador);
-                    }
-                }
-
-                foreach (var item in jugadoresFiltrados)
-                    item.Campeonatos = campeonatos;
-
-                return View(jugadoresFiltrados);
+                var tweets = JsonConvert.DeserializeObject<List<TweetViewModel>>(responseContent);
+                
+                return View(tweets);
             }
             else
             {

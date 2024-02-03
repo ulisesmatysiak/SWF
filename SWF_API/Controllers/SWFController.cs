@@ -305,8 +305,8 @@ namespace SWF_API.Controllers
         {
             try
             {
-                var tweets = _dbcontext.Tweets.ToList();
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Tweets" });
+                var tweets = _dbcontext.ObtenerTweets();
+                return Ok(tweets);
             }
             catch (Exception ex)
             {

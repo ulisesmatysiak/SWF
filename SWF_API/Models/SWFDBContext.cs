@@ -109,4 +109,22 @@ public partial class SWFDBContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public List<object> ObtenerTweets()
+    {
+        var resultado = (from tweet in Tweets
+                         join jugador in Jugadores on tweet.IdJugador equals jugador.Id
+                         join campeonato in Campeonatos on jugador.IdCampeonato equals campeonato.Id
+                         join fecha in Fechas on tweet.IdFecha equals fecha.Id
+                         select new
+                         {
+                             nombre = jugador.Nombre,
+                             camiseta = jugador.Camiseta,
+                             imagen = jugador.ImagenUrl,
+                             campeonato = campeonato.Descripcion,
+                             fecha = fecha.Descripcion
+                         }).ToList();
+
+        return resultado.Cast<object>().ToList();
+    }
 }
