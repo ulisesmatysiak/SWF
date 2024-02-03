@@ -9,18 +9,22 @@
 
 @if (Model != null && Model.Any())
 {
-    <div class="card-deck">
-        @foreach (var tweet in Model)
-        {
-            <div class="card">
-                <img src="" class="card-img-top" alt="Imagen del jugador">
-                <div class="card-body">
-                    <h5 class="card-title">@tweet.Nombre</h5>
-                    <p class="card-text">Número de camiseta: @tweet.Camiseta</p>
-                    <p class="card-text">Descripción del campeonato: @tweet.Campeonato</p>
-                    <p class="card-text">Fecha: @tweet.Fecha</p>
+    <div class="container">
+        <div class="row">
+            @foreach (var tweet in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@tweet.Imagen" class="card-img-top" alt="Imagen del jugador">
+                        <div class="card-body">
+                            <h5 class="card-title">@tweet.Nombre</h5>
+                            <p class="card-text">Número de camiseta: @tweet.Camiseta</p>
+                            <p class="card-text">Descripción del campeonato: @tweet.Campeonato</p>
+                            <p class="card-text">Fecha: @tweet.Fecha</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 }
