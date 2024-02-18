@@ -11,5 +11,8 @@ namespace SWF_BOT
     {
         [JsonProperty("text")]
         public string Text { get; set; } = string.Empty;
+
+        [JsonProperty("media_ids")]
+        public List<long> Medias { get; set; } = new List<long>();
     }
 }

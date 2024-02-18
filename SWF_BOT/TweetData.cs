@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWF_BOT
 {
-    public class Tweet
+    public class TweetData
     {
         public string? Nombre { get; set; }
         public int Camiseta { get; set; }
