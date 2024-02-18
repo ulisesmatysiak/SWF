@@ -13,6 +13,6 @@ namespace SWF_BOT
         public string Text { get; set; } = string.Empty;
 
         [JsonProperty("media_ids")]
-        public List<long> Medias { get; set; } = new List<long>();
+        public List<string> Medias { get; set; } = new List<string>();
     }
 }
