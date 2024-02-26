@@ -1,18 +1,9 @@
 ﻿using Newtonsoft.Json;
 using SWF_BOT;
 using System.Configuration;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.Json;
-using System.Windows.Markup;
 using Tweetinvi;
-using Tweetinvi.Client;
-using Tweetinvi.Core.Models;
 using Tweetinvi.Models;
-using Tweetinvi.Models.V2;
-using Tweetinvi.Parameters;
-using static System.Net.Mime.MediaTypeNames;
 
 var consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
 var consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
@@ -36,35 +27,40 @@ if (response.IsSuccessStatusCode)
 
     foreach (var tw in tweets)
     {
-        var imageBytes = File.ReadAllBytes(tw.Imagen);
-        var uploaded = await client.Upload.UploadTweetImageAsync(imageBytes);
-        var mediaId = uploaded.Id.ToString();
-
-        var tweetParams = new TweetRequest()
+        var parsed = tw.Fecha.Substring(0, 10);
+        var rightNow = DateTime.Now.ToString("yyyy-MM-dd");
+        if (parsed == rightNow)
         {
-            Text = $"#LasCallesNoOlvidan{tw.Camiseta} {tw.Nombre} x {tw.Campeonato}",
-            Medias = new List<string> { mediaId }
-        };
+            var imageBytes = File.ReadAllBytes(tw.Imagen);
+            var uploaded = await client.Upload.UploadTweetImageAsync(imageBytes);
+            var mediaId = uploaded.Id.ToString();
 
-        try
-        {
-            var result = await client.Execute.AdvanceRequestAsync(BuildTwitterRequest(client, tweetParams));
-
-            static Action<ITwitterRequest> BuildTwitterRequest(TwitterClient client, TweetRequest tweetParams)
+            var tweetParams = new TweetRequest()
             {
-                return (ITwitterRequest request) =>
+                Text = $"#LasCallesNoOlvidan{tw.Camiseta} {tw.Nombre} x {tw.Campeonato}",
+                Medias = new List<string> { mediaId }
+            };
+
+            try
+            {
+                var result = await client.Execute.AdvanceRequestAsync(BuildTwitterRequest(client, tweetParams));
+
+                static Action<ITwitterRequest> BuildTwitterRequest(TwitterClient client, TweetRequest tweetParams)
                 {
-                    var jsonBody = client.Json.Serialize(new { text = tweetParams.Text, media = new { media_ids = tweetParams.Medias } });
-                    var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-                    request.Query.Url = "https://api.twitter.com/2/tweets";
-                    request.Query.HttpMethod = Tweetinvi.Models.HttpMethod.POST;
-                    request.Query.HttpContent = content;
-                };
+                    return (ITwitterRequest request) =>
+                    {
+                        var jsonBody = client.Json.Serialize(new { text = tweetParams.Text, media = new { media_ids = tweetParams.Medias } });
+                        var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                        request.Query.Url = "https://api.twitter.com/2/tweets";
+                        request.Query.HttpMethod = Tweetinvi.Models.HttpMethod.POST;
+                        request.Query.HttpContent = content;
+                    };
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
     }
 }
