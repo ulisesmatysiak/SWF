@@ -62,6 +62,10 @@ if (response.IsSuccessStatusCode)
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
+        else
+        {
+            Console.WriteLine($"No hay tweets programados para hoy {rightNow}");
+        }
     }
 }
 else
