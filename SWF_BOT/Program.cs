@@ -82,6 +82,8 @@ namespace SWF_BOT
                             catch (Exception ex)
                             {
                                 log.Error($"Error: {ex.Message}");
+                                Console.WriteLine($"Error: {ex.Message}");
+                                Console.ReadLine();
                             }
                         }
                     }
@@ -98,6 +100,7 @@ namespace SWF_BOT
             catch (Exception ex)
             {
                 log.Info($"Error get client: {ex.Message}");
+                Console.WriteLine($"Error get client: {ex.Message}");
                 Console.ReadLine();
             }
         }
