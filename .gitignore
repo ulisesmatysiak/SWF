@@ -9,7 +9,10 @@
 *.user
 *.userosscache
 *.sln.docstates
+
 SWF_BOT/App.config
+SWF_BOT/img
+SWF_BOT/log4net.config
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
