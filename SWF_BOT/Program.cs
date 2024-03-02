@@ -51,7 +51,13 @@ namespace SWF_BOT
                             if (parsed == rightNow)
                             {
                                 tweetFound = true;
-                                var imageBytes = File.ReadAllBytes(tw.Imagen);
+
+                                string baseDirectory = ConfigurationManager.AppSettings["BaseDirectory"];
+                                string relativePath = tw.Imagen;
+                                string fullPath = Path.Combine(baseDirectory, relativePath);
+
+
+                                var imageBytes = File.ReadAllBytes(fullPath);
                                 var uploaded = await client.Upload.UploadTweetImageAsync(imageBytes);
                                 var mediaId = uploaded.Id.ToString();
 
