@@ -71,26 +71,10 @@ namespace SWF_BOT
                                 {
                                     var result = await client.Execute.AdvanceRequestAsync(BuildTwitterRequest(client, tweetParams));
                                     eventLog.WriteEntry(result.Content);
-                                    Console.WriteLine(result.Content);
-                                    Console.ReadLine();
-
-                                    static Action<ITwitterRequest> BuildTwitterRequest(TwitterClient client, TweetRequest tweetParams)
-                                    {
-                                        return (ITwitterRequest request) =>
-                                        {
-                                            var jsonBody = client.Json.Serialize(new { text = tweetParams.Text, media = new { media_ids = tweetParams.Medias } });
-                                            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-                                            request.Query.Url = "https://api.twitter.com/2/tweets";
-                                            request.Query.HttpMethod = Tweetinvi.Models.HttpMethod.POST;
-                                            request.Query.HttpContent = content;
-                                        };
-                                    }
                                 }
                                 catch (Exception ex)
                                 {
                                     eventLog.WriteEntry($"Error: {ex.Message}");
-                                    Console.WriteLine($"Error: {ex.Message}");
-                                    Console.ReadLine();
                                 }
                             }
                         }
@@ -107,10 +91,20 @@ namespace SWF_BOT
                 catch (Exception ex)
                 {
                     eventLog.WriteEntry($"Error get client: {ex.Message}");
-                    Console.WriteLine($"Error get client: {ex.Message}");
-                    Console.ReadLine();
                 }
+                Environment.Exit(0);
             }
+        }
+        static Action<ITwitterRequest> BuildTwitterRequest(TwitterClient client, TweetRequest tweetParams)
+        {
+            return (ITwitterRequest request) =>
+            {
+                var jsonBody = client.Json.Serialize(new { text = tweetParams.Text, media = new { media_ids = tweetParams.Medias } });
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                request.Query.Url = "https://api.twitter.com/2/tweets";
+                request.Query.HttpMethod = Tweetinvi.Models.HttpMethod.POST;
+                request.Query.HttpContent = content;
+            };
         }
     }
 }
